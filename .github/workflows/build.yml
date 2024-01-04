@@ -1,5 +1,4 @@
-name: 01 Basic Docker Build
-# simplest workflow possible
+name: 02 add BuildKit cache
 
 on:
   push:
@@ -12,6 +11,9 @@ jobs:
     name: Build Image
     runs-on: ubuntu-latest
     steps:
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
             
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -24,3 +26,5 @@ jobs:
         with:
           push: ${{ github.event_name != 'pull_request' }}
           tags: scooterx3/notbretfisherhttpenv:latest,scooterx3/notbretfisherhttpenv:01
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

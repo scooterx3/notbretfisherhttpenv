@@ -1,4 +1,4 @@
-name: 02 add BuildKit cache
+name: 03 Build with Multi-Platform
 
 on:
   push:
@@ -11,6 +11,9 @@ jobs:
     name: Build Image
     runs-on: ubuntu-latest
     steps:
+
+      - name: Set up QEMU 
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -25,6 +28,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: ${{ github.event_name != 'pull_request' }}
-          tags: scooterx3/notbretfisherhttpenv:latest,scooterx3/notbretfisherhttpenv:01
+          tags: scooterx3/notbretfisherhttpenv:latest,scooterx3/notbretfisherhttpenv:03
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64,linux/arm/v7

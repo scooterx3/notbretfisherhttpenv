@@ -28,7 +28,7 @@ jobs:
         id: docker_meta
         uses: docker/metadata-action@v5
         with:
-          images: bretfisher/docker-ci-automation
+          images: scooterx3/notbretfisherhttpenv
           flavor: |
             latest=false
           tags: |

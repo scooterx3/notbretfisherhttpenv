@@ -25,24 +25,7 @@ jobs:
           comment-author: 'github-actions[bot]'
           body-includes: Docker image tag(s) pushed
 
-        # If PR, put image tags in the PR comments
-      - name: Create or update comment for image tags
-        uses: peter-evans/create-or-update-comment@v3
-        if: github.event_name == 'pull_request'
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            Docker image tag(s) pushed:
-            ```text
-            ${{ steps.docker_meta.outputs.tags }}
-            ```
 
-            Labels added to images:
-            ```text
-            ${{ steps.docker_meta.outputs.labels }}
-            ```
-          edit-mode: replace
 
       - name: Set up QEMU 
         uses: docker/setup-qemu-action@v3
@@ -69,6 +52,25 @@ jobs:
             type=ref,event=pr
             type=ref,event=branch
             type=semver,pattern={{version}}
+
+        # If PR, put image tags in the PR comments
+      - name: Create or update comment for image tags
+        uses: peter-evans/create-or-update-comment@v3
+        if: github.event_name == 'pull_request'
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Docker image tag(s) pushed:
+            ```text
+            ${{ steps.docker_meta.outputs.tags }}
+            ```
+
+            Labels added to images:
+            ```text
+            ${{ steps.docker_meta.outputs.labels }}
+            ```
+          edit-mode: replace
 
       - name: Docker build
         uses: docker/build-push-action@v5

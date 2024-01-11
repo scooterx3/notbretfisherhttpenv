@@ -14,17 +14,6 @@ jobs:
       pull-requests: write # needed to create and update comments in PRs
     steps:
 
-        # If PR, put image tags in the PR comments
-        # from https://github.com/marketplace/actions/create-or-update-comment
-      - name: Find comment for image tags
-        uses: peter-evans/find-comment@v2
-        if: github.event_name == 'pull_request'
-        id: fc
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Docker image tag(s) pushed
-
       - name: Set up QEMU 
         uses: docker/setup-qemu-action@v3
 
@@ -49,6 +38,17 @@ jobs:
             type=ref,event=pr
             type=ref,event=branch
             type=semver,pattern={{version}}
+
+        # If PR, put image tags in the PR comments
+        # from https://github.com/marketplace/actions/create-or-update-comment
+      - name: Find comment for image tags
+        uses: peter-evans/find-comment@v2
+        if: github.event_name == 'pull_request'
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Docker image tag(s) pushed
 
         # If PR, put image tags in the PR comments
       - name: Create or update comment for image tags
